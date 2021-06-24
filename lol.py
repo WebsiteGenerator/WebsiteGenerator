@@ -59,6 +59,7 @@ def card():
   rs6 = rs6.read()
   ccard = rs1 + curl + rs2 + cimage + rs3 + cname + rs4 + cdescription + rs5 + curl + rs6
   ccards = '\n' + '\n' + ccard
+  createFolder('./resources/temp')
   f = open("./resources/temp/cards.txt", "a+")
   f.write(ccards)
   f.close()
