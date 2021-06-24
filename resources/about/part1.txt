@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.2.0/tailwind.min.css">
+        <style>
+            ::-webkit-scrollbar {
+            width: 10px;
+            }
+            ::-webkit-scrollbar-track {
+            background: #1A202C;
+            }
+            ::-webkit-scrollbar-thumb {
+            background: #666;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+            }
+            body, html {
+                overflow-x: hidden;
+            }
+            body, html {
+                overflow-x: hidden;
+            }
+            body {
+                padding-bottom: 30px;
+            }
+            header span:hover, .card:hover {
+                cursor: pointer;
+                transition-duration: 0.2s;
+            }
+            header span {
+                transition: background-color 75ms ease-in-out;
+                transition: box-shadow 75ms ease-in-out;
+            }
+            .card {
+                transform: rotate(0deg);
+                transition: transform 0.2s ease-in-out;
+            }
+            .card:hover {
+                transform: rotate(2deg);
+            }
+            #splashIcon {
+                transform: translateY(-60%);
+            }
+            #list {
+                display: grid;
+                margin: auto;
+                grid-template-columns: repeat(auto-fit, 320px);
+                grid-gap: 50px;
+                justify-content:center;
+                margin-top: 300px;
+            }
+            * {
+                user-select: none;
+            }
+            .partner-title {
+                display: none;
+            }
+            @media only screen and (max-width: 600px) {
+                #list {
+                    grid-gap: 30px;
+                    margin-top: 220px;
+                }
+            }
+        </style>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>About Me</title>                                      <!-- Put your Website Name here-->
+        <link rel="shortcut icon" href="images/fav_icon.png" type="image/x-icon">
+    </head>
+    <body class="pt-40 p-0 bg-gray-900 text-white">
+
+        <div class="text-center md:w-1/2 w-screen select-none">
+            <a class="text-6xl font-semibold" href="/">

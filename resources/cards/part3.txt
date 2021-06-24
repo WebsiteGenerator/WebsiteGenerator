@@ -1,0 +1,1 @@
+" class="rounded-lg w-10 h-10"><span class="font-bold ml-3 mt-2">

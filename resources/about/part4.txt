@@ -1,0 +1,11 @@
+" id="splashIcon" style="border-radius: 20px;" class="overflow-hidden w-64 mx-auto">
+        </div>
+        <div class="px-20 w-screen" id="list">
+            <!-- FIELD ONE -->
+
+            <div class="card bg-gray-100 rounded-lg bg-gray-800 hover:shadow-xl p-5 content-around" onclick="window.open('/')">   <!-- Put your Website Link here-->
+                <div class="flex">
+                    <img src="https://byzero.is-inside.me/BbW5CHis.png" class="rounded-lg w-10 h-10"><span class="font-bold ml-3 mt-2">Location</span> <!-- Put your Fiel image and your field name Link here-->
+                </div>
+                <p class="text-gray-400 mt-2">
+                    

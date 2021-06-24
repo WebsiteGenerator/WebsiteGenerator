@@ -1,0 +1,9 @@
+</div>
+		<br>
+    </body>
+	<footer class="text-gray-500">
+        <div class="flex justify-center" onclick="window.open('https://byzero.xyz/copyright')">
+            Copyright | byZero & Luna
+        </div>
+    </footer>
+</html>
