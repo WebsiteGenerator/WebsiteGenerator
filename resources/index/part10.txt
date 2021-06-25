@@ -3,5 +3,7 @@
     </body>
 	<footer class="text-gray-500">
         <div class="flex justify-center" onclick="window.open('https://byzero.xyz/copyright')">
-            Made with byZero's Website Generator | Copyright | byZero & Luna
+            Made with byZero's Website Generator
         </div>
+	</footer>
+</html>
