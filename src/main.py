@@ -1,5 +1,6 @@
 import os
 import asyncio
+import re
 
 # Folder
 def createFolder(directory):
@@ -68,7 +69,8 @@ def card():
   rs6 = rs6.read()
   rsurl = open("./resources/cards/parturl.txt", "r")
   rsurl = rsurl.read()
-  ccard = rs1 + cframe + rsurl + curl + rs2 + cimage + rs3 + cname + rs4 + cdescription + rs5 + curl + rs6
+  cpurl = curl.replace('https://','')
+  ccard = rs1 + cframe + rsurl + curl + rs2 + cimage + rs3 + cname + rs4 + cdescription + rs5 + cpurl + rs6
   ccards = '\n' + '\n' + ccard
   createFolder('./resources/temp')
   f = open("./resources/temp/cards.txt", "a+")
