@@ -12,7 +12,6 @@ Clone this Repository, install [Python](https://python.org) and run:
   python main.py
 ```
 
-Run it on Repl.it - https://replit.com/join/haoqfksuqj-byzeroofficial
     
 ## FAQ
 
