@@ -17,7 +17,7 @@ Clone this Repository, install [Python](https://python.org) and run:
 
 #### Who made the Original Website?
 
-Flamex - https://github.com/flamexdev/personal
+Flamex - https://github.com/flamexdev/
 
 #### Something doesn't work, what can I do?
 
@@ -34,7 +34,6 @@ Create an Issue! :D
 ## Used By
 
 This project is used by:
-- https://byzero.ml
 - https://chaospaul.ml
 - https://soupnoob.ml
 - https://betonter.ml
