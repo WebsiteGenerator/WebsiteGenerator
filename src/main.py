@@ -158,7 +158,7 @@ if path == False:
 elif path == True:
   socialmedias = open("./resources/temp/sci.txt", "r")
   socialmedias = socialmedias.read()
-index = rs1 + domain + "\" content='" + description + rs2 + description + rs3 + previewimage + rs4 + name + rs5 + image + rs6 + name + rs7 + description + rs8 + image + rs9 + ccards + rs10 + socialmedias + "\n	</footer>\n</html>"
+index = rs1 + domain + "\" content='" + name + rs2 + description + rs3 + previewimage + rs4 + name + rs5 + image + rs6 + name + rs7 + description + rs8 + image + rs9 + ccards + rs10 + socialmedias + "\n	</footer>\n</html>"
 f = open("./website/index.html", "a+")
 f.write(index)
 f.close()
