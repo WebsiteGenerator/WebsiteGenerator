@@ -28,7 +28,7 @@ Create an Issue! :D
   
 ## Documentation
 
-[Documentation](https://byzeroofficial.gitbook.io/website-generator)
+[Documentation](https://by0.link/docs/websitegenerator)
 
   
 ## Used By
