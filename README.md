@@ -34,9 +34,9 @@ Create an Issue! :D
 ## Used By
 
 This project is used by:
-- https://chaospaul.ml
-- https://soupnoob.ml
-- https://betonter.ml
+- https://adb.sh/chat
+- https://byzero.dev/chat
+- https://edwinproking.ml
 
 Create a Pull Request, so I can add your Website!
 
