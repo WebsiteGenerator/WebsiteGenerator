@@ -63,3 +63,4 @@ Create a Pull Request, so I can add your Website!
 ## Disclaimer
 Before you use an icon, make sure you are not breaking any laws, design/trademark guidelines or licenses. **I have never had any problems with it.**
 If you're owner of certain trademark(s) and want icon taken down for whatever reason, please [contact me](mailto:mail@byzero.dev).
+Also, make sure to use an imprint for your website.
