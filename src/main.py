@@ -1,5 +1,4 @@
 import os
-import re
 
 # Folder
 def createFolder(directory):
