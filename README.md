@@ -15,7 +15,7 @@
 
 ## Run Locally
 
-1. Clone the project
+1. [Download the latest version](https://github.com/byZeroOfficial/WebsiteGenerator/releases/latest/download/WebsiteGenerator.zip)
 2. Install Python
 3. In the ./src/ Folder, run
 ```
