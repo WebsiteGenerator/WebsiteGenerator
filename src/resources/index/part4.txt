@@ -1,7 +1,7 @@
 ' />
         <meta name="theme-color" content="#c83ca0">
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.2.0/tailwind.min.css">
+        <link rel="stylesheet" href="style.css">
         <style>
             ::-webkit-scrollbar {
             width: 10px;

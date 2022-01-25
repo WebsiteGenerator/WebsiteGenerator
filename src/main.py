@@ -125,6 +125,8 @@ rs10 = open("./resources/index/part10.txt", "r")
 rs10 = rs10.read()
 partpronouns = open("./resources/index/partpronouns.txt", "r")
 partpronouns = partpronouns.read()
+css = open("./resources/index/css.txt", "r")
+css = css.read()
 
 path = os.path.exists("./resources/temp/cards.txt")
 if path == False:
@@ -147,6 +149,8 @@ if os.path.exists("./resources/temp/cards.txt"):
   os.remove("./resources/temp/cards.txt")
 if os.path.exists("./resources/temp/sci.txt"):
   os.remove("./resources/temp/sci.txt")
+filecss = open("./website/style.css", "a+")
+filecss.write(css)
 
 print('Thanks for using my Python-Script.')
 print('Done!')
