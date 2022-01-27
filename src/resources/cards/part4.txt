@@ -1,4 +1,0 @@
-</span> <!-- Put your Field image and your field name Link here-->
-                </div>
-                <p class="text-gray-400 mt-2">
-                    
