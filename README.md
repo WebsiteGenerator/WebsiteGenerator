@@ -17,14 +17,16 @@
 
 1. Install Python and pip
 2. Install it with 
+    
 ```bash
 pip install by0websitegenerator
 ```
 3. Run
 ```bash
 generatewebsite
-``
+```
 
+    
 ## Run the standalone
 1. [Download the latest version](https://github.com/byZeroOfficial/WebsiteGenerator/releases/latest/download/WebsiteGenerator.zip)
 2. Install Python
