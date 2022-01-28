@@ -1,0 +1,7 @@
+
+	[console_scripts]
+	websitegenerator=wg:main
+    generatewebsite=wg:main
+    gw=wg:main
+    makewebsite=wg:main
+	

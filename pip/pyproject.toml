@@ -1,0 +1,10 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel",
+    "requests",
+    "zipfile36",
+    "pytest-shutil",
+    "click"
+]
+build-backend = "setuptools.build_meta"

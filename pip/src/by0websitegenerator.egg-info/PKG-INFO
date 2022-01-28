@@ -1,3 +1,20 @@
+Metadata-Version: 2.1
+Name: by0websitegenerator
+Version: 5.0.1
+Summary: Make a website in just 5 minutes!
+Home-page: https://generator.byzero.dev
+Author: byZer0
+Author-email: mail@byzero.dev
+License: UNKNOWN
+Project-URL: Bug Tracker, https://github.com/WebsiteGenerator/WebsiteGenerator/issues
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
 <p align="center">
     <a href="https://byzero.dev/copyright">
         <img src="https://raw.githubusercontent.com/byZeroOfficial/WebsiteGenerator/main/brand/Logo.png" width="350" />
@@ -74,3 +91,5 @@ Create a Pull Request, so I can add your Website!
 Before you use an icon, make sure you are not breaking any laws, design/trademark guidelines or licenses. **I have never had any problems with it.**
 If you're owner of certain trademark(s) and want icon taken down for whatever reason, please [contact me](mailto:mail@byzero.dev).
 Also, make sure to use an imprint for your website.
+
+

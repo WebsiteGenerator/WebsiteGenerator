@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+setup.py
+src/WebsiteGenerator/__init__.py
+src/WebsiteGenerator/wg.py
+src/by0websitegenerator.egg-info/PKG-INFO
+src/by0websitegenerator.egg-info/SOURCES.txt
+src/by0websitegenerator.egg-info/dependency_links.txt
+src/by0websitegenerator.egg-info/entry_points.txt
+src/by0websitegenerator.egg-info/top_level.txt
