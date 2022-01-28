@@ -1,2 +1,0 @@
-' />
-        <meta property="og:image" id="eIcon" content='

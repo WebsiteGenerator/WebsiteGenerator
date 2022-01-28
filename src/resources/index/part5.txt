@@ -1,2 +1,0 @@
-</title>                                      <!-- Put your Website Name here-->
-        <link rel="shortcut icon" href="

@@ -1,3 +1,0 @@
-" id="splashIcon" style="border-radius: 20px;" class="overflow-hidden w-64 mx-auto">
-        </div>
-        <div class="px-20 w-screen" id="list">
