@@ -13,7 +13,7 @@ on:
 
 jobs:
   # This workflow contains a single job called "build"
-  zip-and-release:
+  zip:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -27,16 +27,8 @@ jobs:
           # Filename for archive
           filename: WebsiteGenerator.zip # default is release.zip
           # Base path for archive files
-          path: /src # optional, default is .
+          path: /src/ # optional, default is .
           # Working directory before zipping
-          directory: . # optional, default is .
+          directory: /src/ # optional, default is .
           # Tool to use for archiving
           type: zip # optional, default is zip
-      - name: release
-        uses: djnicholson/release-action@v2.11
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          release-name: 'Latest rolling build'
-          tag-name: 'latest'
-          asset-name: 'WebsiteGenerator.zip'
-          file: 'WebsiteGenerator.zip'
