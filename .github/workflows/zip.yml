@@ -27,8 +27,8 @@ jobs:
           # Filename for archive
           filename: WebsiteGenerator.zip # default is release.zip
           # Base path for archive files
-          path: /src/ # optional, default is .
+          path: ./src/ # optional, default is .
           # Working directory before zipping
-          directory: /src/ # optional, default is .
+          directory: ./src/ # optional, default is .
           # Tool to use for archiving
           type: zip # optional, default is zip
