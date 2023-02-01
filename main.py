@@ -167,3 +167,4 @@ shutil.rmtree("./web/wbsg_resources/")
 
 print('Thanks for using my Python-Script.')
 print('Done!')
+
