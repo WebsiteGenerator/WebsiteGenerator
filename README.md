@@ -41,7 +41,7 @@ python main.py
 
 ## Demo
 
-https://demo.generator.byzero.dev/
+https://demo.generator.by0.link/
 
 
 ## Documentation
