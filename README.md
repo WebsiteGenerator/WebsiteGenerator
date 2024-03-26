@@ -46,7 +46,7 @@ https://demo.generator.byzero.dev/
 
 ## Documentation
 
-You can find documentation on how to install Python and what image codes are available [here](https://generator.byzero.dev).
+You can find documentation on how to install Python and what image codes are available [here](https://generator.by0.link).
 
 
 
@@ -55,7 +55,7 @@ You can find documentation on how to install Python and what image codes are ava
     <i>The new image codes allow you to easily find icons for the cards and the social media icons.</i>
 </p>
 <p align="center">
-   <b><a href="https://generator.byzero.dev/image-codes">Browse the icons on our website</a></b>
+   <b><a href="https://generator.by0.link/image-codes">Browse the icons on our website</a></b>
 </p>
 
 ### Credits
@@ -63,12 +63,6 @@ You can find documentation on how to install Python and what image codes are ava
 - xmpp-Logo by https://github.com/xmpp-ftw/logo.
 - session-Logo by the Official Repository: https://by0.link/D8k8Fw
 - Generic-Icons by [aegis-icons](https://aegis-icons.github.io/)
-## Used By
-This project is used by:
-
-    https://adb.sh/chat
-    https://byzero.dev/chat
-    https://edwinproking.ml
 
 Create a Pull Request, so I can add your Website!
 
