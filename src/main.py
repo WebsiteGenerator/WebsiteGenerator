@@ -2,168 +2,190 @@ import os
 import requests
 import zipfile
 import shutil
+import sys
 
-# Download required resources
-downloadurl = 'https://raw.githubusercontent.com/WebsiteGenerator/resources/main/latest.zip'
-r = requests.get(downloadurl, allow_redirects=True)
-open('latest.zip', 'wb').write(r.content)
-with zipfile.ZipFile("latest.zip", 'r') as zip_ref:
-  zip_ref.extractall("./web/")
-# Remove the zip file
-os.remove('latest.zip')
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
-# Folder
-def createFolder(directory):
+def create_folder(directory):
+    """Erstellt einen Ordner, falls dieser noch nicht existiert."""
     try:
         if not os.path.exists(directory):
             os.makedirs(directory)
     except OSError:
-        print ('Error: Creating directory. ' +  directory)
+        print(f"Fehler: Konnte das Verzeichnis {directory} nicht erstellen.")
+        sys.exit(1)
 
-createFolder('./web')
-createFolder('./web/wbsg_resources/temp')
+def download_resources():
+    """Lädt die benötigten HTML-Bausteine als ZIP herunter und entpackt sie."""
+    print("Ruwen's WebsiteGenerator: Lade Ressourcen herunter...")
+    download_url = 'https://raw.githubusercontent.com/WebsiteGenerator/resources/main/latest.zip'
+    
+    try:
+        r = requests.get(download_url, allow_redirects=True)
+        r.raise_for_status()
+        with open('latest.zip', 'wb') as f:
+            f.write(r.content)
+            
+        with zipfile.ZipFile("latest.zip", 'r') as zip_ref:
+            zip_ref.extractall("./web/")
+            
+        os.remove('latest.zip')
+    except Exception as e:
+        print(f"Ein Fehler beim Herunterladen der Ressourcen ist aufgetreten: {e}")
+        sys.exit(1)
 
-# Cards
-def card():
-  cname = input('What is the name of the card? | ')
-  cdescription = input("What is the description of the card? | ")
-  curl = input("What is the URL of the card? | ")
-  print("\n")
-  print("You can find all image codes at https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/icons.")
-  print("\n")
-  cimage = input("What is the image of the card? (You can enter a URL, an image code, or a local path here). | ")
-  if not "/" in cimage:
-      cimage = "https://websitegenerator.github.io/WebsiteGenerator/icons/" + cimage + ".png"
-  cframeyn = input("If you want to use a custom Frame enter your code - Else: Enter n or no | ")
-  if cframeyn == "n" or cframeyn == "no":
-    cframe = "card bg-gray-100 rounded-lg bg-gray-800 hover:shadow-xl p-5 content-around"
-  else:
-    cframe = cframeyn
-  rs1 = open("./web/wbsg_resources/cards/part1.txt", "r")
-  rs1 = rs1.read()
-  rs2 = open("./web/wbsg_resources/cards/part2.txt", "r")
-  rs2 = rs2.read()
-  rs3 = open("./web/wbsg_resources/cards/part3.txt", "r")
-  rs3 = rs3.read()
-  rs4 = open("./web/wbsg_resources/cards/part4.txt", "r")
-  rs4 = rs4.read()
-  rs5 = open("./web/wbsg_resources/cards/part5.txt", "r")
-  rs5 = rs5.read()
-  rs6 = open("./web/wbsg_resources/cards/part6.txt", "r")
-  rs6 = rs6.read()
-  rsurl = open("./web/wbsg_resources/cards/parturl.txt", "r")
-  rsurl = rsurl.read()
-  cpurl = curl.replace('https://','')
-  ccard = rs1 + cframe + rsurl + curl + rs2 + cimage + rs3 + cname + rs4 + cdescription + rs5 + cpurl + rs6
-  ccards = '\n' + '\n' + ccard
-  createFolder('./web/wbsg_resources/temp')
-  f = open("./web/wbsg_resources/temp/cards.txt", "a+")
-  f.write(ccards)
-  f.close()
-  addcard()
+def get_image_url(prompt_text):
+    """Liest eine Bild-URL oder einen Image-Code ein und formatiert ihn passend."""
+    user_input = input(prompt_text).strip()
+    if not user_input:
+        return ""
+    if "/" not in user_input:
+        return f"https://websitegenerator.github.io/WebsiteGenerator/icons/{user_input}.png"
+    return user_input
 
-def socialmedia():
-  sname = input("What is the name of the icon? | ")
-  print("\n")
-  print("You can find all image codes at https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/icons.")
-  print("\n")
-  simage = input("What is the image of the icon? (You can enter a URL, an image code, or a local path here). | ")
-  if not "/" in simage:
-    simage = "https://websitegenerator.github.io/WebsiteGenerator/icons/" + simage + ".png"
-  surl = input("What is the URL of the icon? | ")
-  icon = "                <img src=\"" + simage + '" class="inline-block rounded-lg w-10 h-10" id=icon_' + sname + '" onclick="window.open(\'' + surl + '\')"> '
-  path = os.path.exists("./web/wbsg_resources/temp/sci.txt")
-  if path == False:
-    f = open("./web/wbsg_resources/temp/sci.txt", "a+")
-    f.write('        <div class="m-10" id="socials">\n            <center>' + "\n" + icon)
-    f.close()
-  else:
-    f = open("./web/wbsg_resources/temp/sci.txt", "a")
-    f.write("\n" + icon)
-    f.close()
-  addscm()
+def read_template(path):
+    """Liest eine Template-Datei aus."""
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read()
 
+def gather_cards():
+    """Fragt in einer Schleife nach Cards, bis der Nutzer fertig ist."""
+    cards_html = ""
+    while True:
+        add_card = input("\nMöchtest du eine Card (Projekt/Link) hinzufügen? (y/n) | ").strip().lower()
+        if add_card not in ["y", "yes", "j", "ja"]:
+            break
+            
+        print("-" * 40)
+        cname = input('Wie heißt die Card? | ')
+        cdescription = input("Wie lautet die Beschreibung? | ")
+        curl = input("Wie lautet die URL? | ")
+        print("\nTipp: Du kannst eine URL, einen lokalen Pfad oder einen Image Code angeben.")
+        print("Alle Image Codes findest du unter: https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/icons\n")
+        cimage = get_image_url("Welches Bild/Icon soll verwendet werden? | ")
+        
+        cframeyn = input("Möchtest du benutzerdefiniertes Tailwind-CSS für die Card nutzen? (Sonst 'n') | ").strip()
+        cframe = "card bg-gray-100 rounded-lg bg-gray-800 hover:shadow-xl p-5 content-around"
+        if cframeyn not in ["n", "no", "nein"]:
+            cframe = cframeyn
 
-name = input("What is the name for the website? (this could be your name or something else) | ")
-print(f'Thanks! {name} is a really nice name. :D')
-pronouns = input("What are your pronouns? (if you don't want to use pronouns, type no or n). | ")
-pronounslower = pronouns.lower()
-if pronounslower == "no" or pronounslower == "n":
-  pronouns = ""
-description = input("What do you want to use as your description? | ")
-domain = input("What domain do you want to use? (Without https:// or http://) | ")
-image = input("What image do you want to use? (You can enter a URL or a local path here). | ")
-previewimage = input("What image do you want to use as a thumbnail? (Only URL) | ")
+        # Lese die Bausteine der Card
+        rs1 = read_template("./web/wbsg_resources/cards/part1.txt")
+        rs2 = read_template("./web/wbsg_resources/cards/part2.txt")
+        rs3 = read_template("./web/wbsg_resources/cards/part3.txt")
+        rs4 = read_template("./web/wbsg_resources/cards/part4.txt")
+        rs5 = read_template("./web/wbsg_resources/cards/part5.txt")
+        rs6 = read_template("./web/wbsg_resources/cards/part6.txt")
+        rsurl = read_template("./web/wbsg_resources/cards/parturl.txt")
+        
+        cpurl = curl.replace('https://', '')
+        
+        # Baue die Card zusammen
+        cards_html += f"\n\n{rs1}{cframe}{rsurl}{curl}{rs2}{cimage}{rs3}{cname}{rs4}{cdescription}{rs5}{cpurl}{rs6}"
+        print(f"✅ Card '{cname}' hinzugefügt!")
+        
+    return cards_html
 
-def addcard():
-  addcard = input("Do you want to add a card? (y or n) | ")
-  addcard = addcard.lower()
-  if addcard == "y" or addcard == "yes":
-    card()
-addcard()
+def gather_socials():
+    """Fragt in einer Schleife nach Social Media Icons, bis der Nutzer fertig ist."""
+    socials_html = ""
+    has_socials = False
+    
+    while True:
+        add_scm = input("\nMöchtest du ein Social-Media Icon hinzufügen? (y/n) | ").strip().lower()
+        if add_scm not in ["y", "yes", "j", "ja"]:
+            break
+            
+        has_socials = True
+        print("-" * 40)
+        sname = input("Wie heißt das Netzwerk/Icon? | ")
+        print("\nTipp: Alle Image Codes findest du unter: https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/icons\n")
+        simage = get_image_url("Welches Icon soll verwendet werden? (Image Code oder URL) | ")
+        surl = input("Wie lautet die URL zu deinem Profil? | ")
+        
+        icon = f'                <img src="{simage}" class="inline-block rounded-lg w-10 h-10 m-2 cursor-pointer hover:opacity-80" id="icon_{sname}" onclick="window.open(\'{surl}\')"> '
+        socials_html += f"\n{icon}"
+        print(f"✅ Icon '{sname}' hinzugefügt!")
+        
+    if has_socials:
+        return f'        <div class="m-10" id="socials">\n            <center>{socials_html}\n            </center>\n        </div>'
+    return ""
 
-def addscm():
-  addscme = input("Do you want to add a Social-Media Icon? (y or n) | ")
-  addscme = addscme.lower()
-  if addscme == "y" or addscme == "yes":
-    socialmedia()
-  else:
-    path = os.path.exists("./web/wbsg_resources/temp/sci.txt")
-    if path == True:
-      f = open("./web/wbsg_resources/temp/sci.txt", "a+")
-      f.write("\n            </center>\n    </footer>\n</html>")
-addscm()
+def main():
+    clear_screen()
+    print("=" * 60)
+    print(" 🚀 Willkommen beim WebsiteGenerator! (Terminal Edition) 🚀")
+    print("=" * 60)
+    
+    # 1. Ressourcen vorbereiten
+    create_folder('./web')
+    download_resources()
+    
+    # 2. Basisdaten abfragen
+    print("\nLass uns ein paar Infos über dich sammeln!")
+    name = input("Wie lautet der Name für deine Website? | ").strip()
+    print(f"Cool! '{name}' ist ein richtig guter Name. :D")
+    
+    pronouns = input("Was sind deine Pronomen? (Lass es leer oder tippe 'n', um keine anzugeben) | ").strip()
+    if pronouns.lower() in ["no", "n", "nein"]:
+        pronouns = ""
+        
+    description = input("Was möchtest du als Beschreibungstext nutzen? | ").strip()
+    domain = input("Welche Domain nutzt du? (Ohne https://) | ").strip()
+    image = input("Link zu deinem Profilbild (URL) | ").strip()
+    previewimage = input("Link zu deinem Vorschaubild (Thumbnail) | ").strip()
+    
+    # 3. Dynamische Elemente abfragen
+    cards_content = gather_cards()
+    socials_content = gather_socials()
+    
+    # 4. Zusammenbauen der index.html
+    print("\nGeneriere deine Website... Bitte warten!")
+    
+    try:
+        rs1 = read_template("./web/wbsg_resources/index/part1.txt")
+        rs2 = read_template("./web/wbsg_resources/index/part2.txt")
+        rs3 = read_template("./web/wbsg_resources/index/part3.txt")
+        rs4 = read_template("./web/wbsg_resources/index/part4.txt")
+        rs5 = read_template("./web/wbsg_resources/index/part5.txt")
+        rs6 = read_template("./web/wbsg_resources/index/part6.txt")
+        rs7 = read_template("./web/wbsg_resources/index/part7.txt")
+        rs8 = read_template("./web/wbsg_resources/index/part8.txt")
+        rs9 = read_template("./web/wbsg_resources/index/part9.txt")
+        rs10 = read_template("./web/wbsg_resources/index/part10.txt")
+        partpronouns = read_template("./web/wbsg_resources/index/partpronouns.txt")
+        css = read_template("./web/wbsg_resources/index/css.txt")
+        
+        # HTML zusammensetzen
+        index = (
+            f"{rs1}{domain}\" content='{name}{rs2}{description}{rs3}{previewimage}"
+            f"{rs4}{name}{rs5}{image}{rs6}{name}{rs7}{description}{rs8}{pronouns}"
+            f"{partpronouns}{image}{rs9}{cards_content}{rs10}"
+        )
+        
+        # Den kaputten part10 reparieren, indem wir Socials vor den Footer packen
+        # Da part10.txt bereits das schließende </body> und <footer> enthält, 
+        # ersetzen wir das <br>\n </body> im Template durch unsere Socials.
+        index = index.replace("</div>\n\t\t<br>\n    </body>", f"</div>\n        {socials_content}\n\t\t<br>\n    </body>")
 
-rs1 = open("./web/wbsg_resources/index/part1.txt", "r")
-rs1 = rs1.read()
-rs2 = open("./web/wbsg_resources/index/part2.txt", "r")
-rs2 = rs2.read()
-rs3 = open("./web/wbsg_resources/index/part3.txt", "r")
-rs3 = rs3.read()
-rs4 = open("./web/wbsg_resources/index/part4.txt", "r")
-rs4 = rs4.read()
-rs5 = open("./web/wbsg_resources/index/part5.txt", "r")
-rs5 = rs5.read()
-rs6 = open("./web/wbsg_resources/index/part6.txt", "r")
-rs6 = rs6.read()
-rs7 = open("./web/wbsg_resources/index/part7.txt", "r")
-rs7 = rs7.read()
-rs8 = open("./web/wbsg_resources/index/part8.txt", "r")
-rs8 = rs8.read()
-rs9 = open("./web/wbsg_resources/index/part9.txt", "r")
-rs9 = rs9.read()
-rs10 = open("./web/wbsg_resources/index/part10.txt", "r")
-rs10 = rs10.read()
-partpronouns = open("./web/wbsg_resources/index/partpronouns.txt", "r")
-partpronouns = partpronouns.read()
-css = open("./web/wbsg_resources/index/css.txt", "r")
-css = css.read()
+        # HTML speichern
+        with open("./web/index.html", "w", encoding="utf-8") as f:
+            f.write(index)
+            
+        # CSS speichern
+        with open("./web/style.css", "w", encoding="utf-8") as f:
+            f.write(css)
+            
+    except Exception as e:
+        print(f"Fehler beim Erstellen der Dateien: {e}")
+    finally:
+        # 5. Aufräumen
+        if os.path.exists("./web/wbsg_resources/"):
+            shutil.rmtree("./web/wbsg_resources/")
 
-path = os.path.exists("./web/wbsg_resources/temp/cards.txt")
-if path == False:
-  ccards = ""
-elif path == True:
-  ccards = open("./web/wbsg_resources/temp/cards.txt", "r")
-  ccards = ccards.read()
+    print("\n🎉 Fertig! Vielen Dank, dass du mein Python-Skript nutzt.")
+    print("Deine neue Website liegt im Ordner './web/' bereit.")
 
-path = os.path.exists("./web/wbsg_resources/temp/sci.txt")
-if path == False:
-  socialmedias = ""
-elif path == True:
-  socialmedias = open("./web/wbsg_resources/temp/sci.txt", "r")
-  socialmedias = socialmedias.read()
-index = rs1 + domain + "\" content='" + name + rs2 + description + rs3 + previewimage + rs4 + name + rs5 + image + rs6 + name + rs7 + description + rs8 + pronouns + partpronouns + image + rs9 + ccards + rs10 + socialmedias + "\n	</footer>\n</html>"
-f = open("./web/index.html", "a+")
-f.write(index)
-f.close()
-if os.path.exists("./web/wbsg_resources/temp/cards.txt"):
-  os.remove("./web/wbsg_resources/temp/cards.txt")
-if os.path.exists("./web/wbsg_resources/temp/sci.txt"):
-  os.remove("./web/wbsg_resources/temp/sci.txt")
-filecss = open("./web/style.css", "a+")
-filecss.write(css)
-
-shutil.rmtree("./web/wbsg_resources/")
-
-print('Thanks for using my Python-Script.')
-print('Done!')
+if __name__ == "__main__":
+    main()
