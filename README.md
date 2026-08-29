@@ -1,72 +1,67 @@
-<p align="center">
-    <a href="https://byzero.dev/copyright">
-        <img src="https://raw.githubusercontent.com/byZeroOfficial/WebsiteGenerator/main/brand/Logo.png" width="350" />
-    </a>
-</p>
-<p align="center">
-    <i>With WebsiteGenerator you can easily generate web pages in the terminal.</i>
-</p>
-<p align="center">
-   <b><a href="https://generator.byzero.dev/image-codes">Browse the icons on our website</a></b> • <b><a href="https://github.com/byZeroOfficial/WebsiteGenerator/issues">Get help</a></b>
-</p>
+<div align="center">
+  <a href="https://github.com/WebsiteGenerator/WebsiteGenerator">
+    <img src="https://raw.githubusercontent.com/WebsiteGenerator/WebsiteGenerator/main/brand/Logo.png" width="350" alt="WebsiteGenerator Logo" />
+  </a>
 
-<p align="center">
-    <i><b>Make a issue</b> if you want to request a new icon.</i>
+  <p>
+    <b>Generate your personal website in seconds – directly in your browser or via terminal.</b>
+  </p>
 
-## Run via pip
+  <p>
+    <a href="https://websitegenerator.github.io/WebsiteGenerator/"><b>🚀 Open Web Generator</b></a> •
+    <a href="https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/icons"><b>Browse Icons</b></a> •
+    <a href="https://github.com/WebsiteGenerator/WebsiteGenerator/issues"><b>Report Issue</b></a>
+  </p>
+</div>
 
-1. Install Python and pip
-2. Install it with 
-    
-```bash
-pip install by0websitegenerator
-```
-3. Run
-```bash
-generatewebsite
-```
+---
 
-    
-## Run the standalone
-1. [Download the latest version](https://github.com/byZeroOfficial/WebsiteGenerator/releases/latest/download/WebsiteGenerator.zip)
-2. Install Python
-3. In the ./src/ Folder, run
-```
-python main.py 
-```
-4. It should work.
+## 🌟 About
 
+WebsiteGenerator lets you create a clean, beautiful personal landing page. Originally written as a fun side project during my youth, it has now been modernized with a full-fledged web version while keeping the old Python terminal generator alive for nostalgia!
 
+## 🚀 Web Version (Recommended)
 
+The easiest way to generate your website is by using the web interface. 
+It requires no installation and generates a ready-to-host `index.html` file with inline CSS for maximum performance and portability.
 
-## Demo
+👉 **[Try the Web Version here](https://websitegenerator.github.io/WebsiteGenerator/)**
 
-https://demo.generator.by0.link/
+## 💻 Manual Terminal Version
 
+If you prefer the classic terminal approach, you can still run the Python script locally.
 
-## Documentation
+### Requirements
+- Python 3.x installed
 
-You can find documentation on how to install Python and what image codes are available [here](https://generator.by0.link).
+### Usage
+1. Clone the repository or download the source code.
+2. Navigate to the `src` folder:
+   ```bash
+   cd src
+   ```
+3. Run the generator:
+   ```bash
+   python main.py 
+   ```
+4. Follow the interactive prompts. The generated HTML will be saved in the `./web/` folder.
 
+## 🖼️ Icons / Image Codes
 
+WebsiteGenerator comes with built-in icons for your social media and project cards. 
+You can find all available icons in the [`icons/` directory](https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/icons).
 
-## Icons
-<p align="center">
-    <i>The new image codes allow you to easily find icons for the cards and the social media icons.</i>
-</p>
-<p align="center">
-   <b><a href="https://generator.by0.link/image-codes">Browse the icons on our website</a></b>
-</p>
+Simply use the filename without the `.png` extension (e.g., `github`, `twitter`, `discord`) when prompted for an image code.
 
 ### Credits
-- Some Images used are by https://solo.to.
-- xmpp-Logo by https://github.com/xmpp-ftw/logo.
-- session-Logo by the Official Repository: https://by0.link/D8k8Fw
-- Generic-Icons by [aegis-icons](https://aegis-icons.github.io/)
+- Some images used are by solo.to.
+- `xmpp` logo by [xmpp-ftw/logo](https://github.com/xmpp-ftw/logo).
+- Generic icons by [aegis-icons](https://aegis-icons.github.io/).
 
-Create a Pull Request, so I can add your Website!
+If you add a new icon, feel free to create a Pull Request!
 
-## Disclaimer
-Before you use an icon, make sure you are not breaking any laws, design/trademark guidelines or licenses. **I have never had any problems with it.**
-If you're owner of certain trademark(s) and want icon taken down for whatever reason, please [contact me](mailto:mail@byzero.dev).
-Also, make sure to use an imprint for your website.
+## ⚖️ Disclaimer
+
+Before you use an icon, make sure you are not breaking any laws, design/trademark guidelines, or licenses. I have never had any problems with it, but use them at your own risk. If you are the owner of a certain trademark and want an icon taken down, please open an issue.
+
+Also, make sure to include an imprint (Impressum) on your final website if your local laws require it.

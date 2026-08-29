@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebsiteGenerator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-anim"></div>
+    
+    <div class="container">
+        <header>
+            <h1>WebsiteGenerator</h1>
+            <p>Generiere deine persönliche Website in Sekunden.</p>
+        </header>
+
+        <main>
+            <section class="card-glass">
+                <h2>Allgemeine Informationen</h2>
+                <div class="input-group">
+                    <label>Name</label>
+                    <input type="text" id="site-name" placeholder="Dein Name oder Projektname" />
+                </div>
+                <div class="input-group">
+                    <label>Pronomen (optional)</label>
+                    <input type="text" id="site-pronouns" placeholder="z.B. er/ihm" />
+                </div>
+                <div class="input-group">
+                    <label>Beschreibung</label>
+                    <textarea id="site-desc" rows="3" placeholder="Was machst du?"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Domain</label>
+                    <input type="text" id="site-domain" placeholder="example.com" />
+                </div>
+                <div class="input-group">
+                    <label>Profilbild (URL)</label>
+                    <input type="text" id="site-image" placeholder="https://..." />
+                </div>
+                <div class="input-group">
+                    <label>Vorschaubild / Thumbnail (URL)</label>
+                    <input type="text" id="site-thumb" placeholder="https://..." />
+                </div>
+            </section>
+
+            <section class="card-glass">
+                <h2>Cards</h2>
+                <p class="section-desc">Füge Links zu deinen Projekten oder Portfolios hinzu.</p>
+                <div id="cards-container"></div>
+                <button class="btn btn-secondary" onclick="addCard()">+ Card hinzufügen</button>
+            </section>
+
+            <section class="card-glass">
+                <h2>Social Media</h2>
+                <p class="section-desc">Verlinke deine sozialen Netzwerke. Nutze die <a href="https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/icons" target="_blank">Icon-Namen</a> (z.B. 'github', 'twitter').</p>
+                <div id="socials-container"></div>
+                <button class="btn btn-secondary" onclick="addSocial()">+ Icon hinzufügen</button>
+            </section>
+
+            <div class="actions">
+                <button class="btn btn-primary" onclick="generateWebsite()">Generieren & Herunterladen</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>Made with byZero's Website Generator</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

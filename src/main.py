@@ -29,11 +29,11 @@ def card():
   cdescription = input("What is the description of the card? | ")
   curl = input("What is the URL of the card? | ")
   print("\n")
-  print("Since version 3 there are automatic logos and icons for cards and social media icons if you specify the image code as URL for the images. You can find all image codes at https://by0.link/imagecodes.")
+  print("You can find all image codes at https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/icons.")
   print("\n")
-  cimage = input("What is the image of the card? (You can enter a URL, an image code (https://by0.link/imagecodes) or a local path here). | ")
+  cimage = input("What is the image of the card? (You can enter a URL, an image code, or a local path here). | ")
   if not "/" in cimage:
-      cimage = "https://generat0r.byzero.dev/" + cimage + ".png"
+      cimage = "https://websitegenerator.github.io/WebsiteGenerator/icons/" + cimage + ".png"
   cframeyn = input("If you want to use a custom Frame enter your code - Else: Enter n or no | ")
   if cframeyn == "n" or cframeyn == "no":
     cframe = "card bg-gray-100 rounded-lg bg-gray-800 hover:shadow-xl p-5 content-around"
@@ -65,11 +65,11 @@ def card():
 def socialmedia():
   sname = input("What is the name of the icon? | ")
   print("\n")
-  print("Since version 3 there are automatic logos and icons for cards and social media icons if you specify the image code as URL for the images. You can find all image codes at https://by0.link/imagecodes.")
+  print("You can find all image codes at https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/icons.")
   print("\n")
-  simage = input("What is the image of the icon? (You can enter a URL, an image code (https://by0.link/imagecodes) or a local path here). | ")
+  simage = input("What is the image of the icon? (You can enter a URL, an image code, or a local path here). | ")
   if not "/" in simage:
-    simage = "https://generat0r.byzero.dev/" + simage + ".png"
+    simage = "https://websitegenerator.github.io/WebsiteGenerator/icons/" + simage + ".png"
   surl = input("What is the URL of the icon? | ")
   icon = "                <img src=\"" + simage + '" class="inline-block rounded-lg w-10 h-10" id=icon_' + sname + '" onclick="window.open(\'' + surl + '\')"> '
   path = os.path.exists("./web/wbsg_resources/temp/sci.txt")
