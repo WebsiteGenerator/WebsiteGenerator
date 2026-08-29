@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,59 +13,59 @@
     <div class="container">
         <header>
             <h1>WebsiteGenerator</h1>
-            <p>Generiere deine persönliche Website in Sekunden.</p>
+            <p>Generate your personal website in seconds.</p>
         </header>
 
         <main>
             <section class="card-glass">
-                <h2>Allgemeine Informationen</h2>
+                <h2>General Information</h2>
                 <div class="input-group">
                     <label>Name</label>
-                    <input type="text" id="site-name" placeholder="Dein Name oder Projektname" />
+                    <input type="text" id="site-name" placeholder="Your Name or Project Name" />
                 </div>
                 <div class="input-group">
-                    <label>Pronomen (optional)</label>
-                    <input type="text" id="site-pronouns" placeholder="z.B. er/ihm" />
+                    <label>Pronouns (optional)</label>
+                    <input type="text" id="site-pronouns" placeholder="e.g. he/him" />
                 </div>
                 <div class="input-group">
-                    <label>Beschreibung</label>
-                    <textarea id="site-desc" rows="3" placeholder="Was machst du?"></textarea>
+                    <label>Description</label>
+                    <textarea id="site-desc" rows="3" placeholder="What do you do?"></textarea>
                 </div>
                 <div class="input-group">
                     <label>Domain</label>
                     <input type="text" id="site-domain" placeholder="example.com" />
                 </div>
                 <div class="input-group">
-                    <label>Profilbild (URL)</label>
+                    <label>Profile Picture (URL)</label>
                     <input type="text" id="site-image" placeholder="https://..." />
                 </div>
                 <div class="input-group">
-                    <label>Vorschaubild / Thumbnail (URL)</label>
+                    <label>Preview Image / Thumbnail (URL)</label>
                     <input type="text" id="site-thumb" placeholder="https://..." />
                 </div>
             </section>
 
             <section class="card-glass">
                 <h2>Cards</h2>
-                <p class="section-desc">Füge Links zu deinen Projekten oder Portfolios hinzu.</p>
+                <p class="section-desc">Add links to your projects or portfolio.</p>
                 <div id="cards-container"></div>
-                <button class="btn btn-secondary" onclick="addCard()">+ Card hinzufügen</button>
+                <button class="btn btn-secondary" onclick="addCard()">+ Add Card</button>
             </section>
 
             <section class="card-glass">
                 <h2>Social Media</h2>
-                <p class="section-desc">Verlinke deine sozialen Netzwerke. Nutze die <a href="https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/icons" target="_blank">Icon-Namen</a> (z.B. 'github', 'twitter').</p>
+                <p class="section-desc">Link your social networks. Use the <a href="https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/icons" target="_blank">Icon Codes</a> (e.g., 'github', 'twitter').</p>
                 <div id="socials-container"></div>
-                <button class="btn btn-secondary" onclick="addSocial()">+ Icon hinzufügen</button>
+                <button class="btn btn-secondary" onclick="addSocial()">+ Add Icon</button>
             </section>
 
             <div class="actions">
-                <button class="btn btn-primary" onclick="generateWebsite()">Generieren & Herunterladen</button>
+                <button class="btn btn-primary" onclick="generateWebsite()">Generate & Download</button>
             </div>
         </main>
 
         <footer>
-            <p>Made with byZero's Website Generator</p>
+            <p>Made with WebsiteGenerator</p>
         </footer>
     </div>
 

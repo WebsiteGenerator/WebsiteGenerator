@@ -9,19 +9,19 @@ function addCard() {
             <button class="remove-btn" onclick="removeElement('card-${cardCount}')">×</button>
             <div class="input-group">
                 <label>Name</label>
-                <input type="text" class="card-name" placeholder="Projektname" />
+                <input type="text" class="card-name" placeholder="Project Name" />
             </div>
             <div class="input-group">
-                <label>Beschreibung</label>
-                <input type="text" class="card-desc" placeholder="Kurze Beschreibung" />
+                <label>Description</label>
+                <input type="text" class="card-desc" placeholder="Short description" />
             </div>
             <div class="input-group">
                 <label>Link (URL)</label>
                 <input type="text" class="card-url" placeholder="https://..." />
             </div>
             <div class="input-group">
-                <label>Icon / Bild URL (oder Image Code)</label>
-                <input type="text" class="card-image" placeholder="Image Code (z.B. github) oder volle URL" />
+                <label>Icon / Image URL (or Image Code)</label>
+                <input type="text" class="card-image" placeholder="Image Code (e.g. github) or full URL" />
             </div>
         </div>
     `;
@@ -36,15 +36,15 @@ function addSocial() {
             <button class="remove-btn" onclick="removeElement('social-${socialCount}')">×</button>
             <div class="input-group">
                 <label>Name</label>
-                <input type="text" class="social-name" placeholder="z.B. GitHub" />
+                <input type="text" class="social-name" placeholder="e.g. GitHub" />
             </div>
             <div class="input-group">
                 <label>Link (URL)</label>
                 <input type="text" class="social-url" placeholder="https://..." />
             </div>
             <div class="input-group">
-                <label>Icon (Image Code oder URL)</label>
-                <input type="text" class="social-image" placeholder="z.B. github" />
+                <label>Icon (Image Code or URL)</label>
+                <input type="text" class="social-image" placeholder="e.g. github" />
             </div>
         </div>
     `;
@@ -65,28 +65,28 @@ function resolveImage(input) {
 
 async function generateWebsite() {
     const btn = document.querySelector('.btn-primary');
-    btn.textContent = "Generiere...";
+    btn.textContent = "Generating...";
     btn.disabled = true;
 
     try {
-        // Lade das Tailwind CSS
+        // Load the CSS
         let cssContent = "";
         try {
             const res = await fetch('template.css');
             cssContent = await res.text();
         } catch (e) {
-            console.error("Konnte template.css nicht laden.", e);
+            console.error("Could not load template.css", e);
         }
 
-        // Hole Daten aus den Feldern
-        const name = document.getElementById('site-name').value || "Mein Name";
+        // Get form values
+        const name = document.getElementById('site-name').value || "My Name";
         const pronouns = document.getElementById('site-pronouns').value || "";
-        const desc = document.getElementById('site-desc').value || "Meine Beschreibung";
+        const desc = document.getElementById('site-desc').value || "My Description";
         const domain = document.getElementById('site-domain').value || "example.com";
         const image = document.getElementById('site-image').value || "";
         const thumb = document.getElementById('site-thumb').value || "";
 
-        // Cards generieren
+        // Generate Cards
         let cardsHtml = "";
         document.querySelectorAll('#cards-container .dynamic-item').forEach(el => {
             const cName = el.querySelector('.card-name').value;
@@ -107,7 +107,7 @@ async function generateWebsite() {
 `;
         });
 
-        // Socials generieren
+        // Generate Socials
         let socialsHtml = "";
         const socialItems = document.querySelectorAll('#socials-container .dynamic-item');
         if (socialItems.length > 0) {
@@ -121,7 +121,7 @@ async function generateWebsite() {
             socialsHtml += `</center></div>`;
         }
 
-        // Zusammenbauen des fertigen HTML (analog zum Python-Skript)
+        // Build the final HTML (analogous to the Python script)
         const finalHtml = `<!DOCTYPE html>
 <html>
     <head>
@@ -177,7 +177,7 @@ async function generateWebsite() {
     </footer>
 </html>`;
 
-        // Download anstoßen
+        // Trigger download
         const blob = new Blob([finalHtml], { type: "text/html" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -189,9 +189,9 @@ async function generateWebsite() {
         URL.revokeObjectURL(url);
 
     } catch (e) {
-        alert("Ein Fehler ist aufgetreten: " + e.message);
+        alert("An error occurred: " + e.message);
     } finally {
-        btn.textContent = "Generieren & Herunterladen";
+        btn.textContent = "Generate & Download";
         btn.disabled = false;
     }
 }
