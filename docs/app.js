@@ -1,6 +1,39 @@
 let cardCount = 0;
 let socialCount = 0;
 
+const availableIcons = [
+    "bitcoin", "briar", "cloud", "dev-to", "discord", "dollar", "education", 
+    "element", "euro", "facebook", "flickr", "gallery", "gaming", "github", 
+    "instagram", "internet", "key", "liberapay", "linkedin", "mail", "mastodon", 
+    "matrix", "monero", "money", "music", "note", "odysee", "onlyfans", "patreon", 
+    "paypal", "pinterest", "pixelfed", "plane", "pleroma", "polywork", "pound", 
+    "privacy", "protonmail", "reddit", "rss", "security", "server", "session", 
+    "shopping", "snapchat", "talk", "telegram", "tiktok", "tumblr", "twitch", 
+    "twitter", "user", "video", "xmpp", "youtube"
+];
+
+function initGallery() {
+    const gallery = document.getElementById('icon-gallery');
+    if (!gallery) return;
+    
+    let html = '';
+    availableIcons.forEach(icon => {
+        const url = `https://raw.githubusercontent.com/WebsiteGenerator/WebsiteGenerator/main/icons/${icon}.png`;
+        html += `
+        <div class="icon-item" onclick="copyToClipboard('${icon}')" title="Click to copy '${icon}'">
+            <img src="${url}" alt="${icon}">
+            <span>${icon}</span>
+        </div>`;
+    });
+    gallery.innerHTML = html;
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert(`Copied '${text}' to clipboard!`);
+    });
+}
+
 function addCard() {
     cardCount++;
     const container = document.getElementById('cards-container');
@@ -58,7 +91,7 @@ function removeElement(id) {
 function resolveImage(input) {
     if (!input) return "";
     if (!input.includes('/')) {
-        return "https://websitegenerator.github.io/WebsiteGenerator/icons/" + input + ".png";
+        return "https://raw.githubusercontent.com/WebsiteGenerator/WebsiteGenerator/main/icons/" + input + ".png";
     }
     return input;
 }
@@ -121,7 +154,7 @@ async function generateWebsite() {
             socialsHtml += `</center></div>`;
         }
 
-        // Build the final HTML (analogous to the Python script)
+        // Build the final HTML
         const finalHtml = `<!DOCTYPE html>
 <html>
     <head>
@@ -195,3 +228,6 @@ async function generateWebsite() {
         btn.disabled = false;
     }
 }
+
+// Initialize gallery on load
+window.onload = initGallery;

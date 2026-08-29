@@ -20,7 +20,7 @@ def get_image_url(prompt_text):
     if not user_input:
         return ""
     if "/" not in user_input:
-        return f"https://websitegenerator.github.io/WebsiteGenerator/icons/{user_input}.png"
+        return f"https://raw.githubusercontent.com/WebsiteGenerator/WebsiteGenerator/main/icons/{user_input}.png"
     return user_input
 
 def get_css_content():

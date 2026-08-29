@@ -209,3 +209,70 @@ footer {
     color: #64748b;
     font-size: 0.9rem;
 }
+
+.gallery-container {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+.gallery-container h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+}
+
+#icon-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+#icon-gallery::-webkit-scrollbar {
+    width: 6px;
+}
+#icon-gallery::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 4px;
+}
+#icon-gallery::-webkit-scrollbar-thumb {
+    background: var(--secondary);
+    border-radius: 4px;
+}
+
+.icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem 0.5rem;
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.icon-item:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.icon-item img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+}
+
+.icon-item span {
+    font-size: 0.7rem;
+    color: #cbd5e1;
+    text-align: center;
+    word-break: break-all;
+}
