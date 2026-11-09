@@ -1,167 +1,85 @@
-let cardCount = 0;
-let socialCount = 0;
+// WebsiteGenerator: Formular -> eine index.html. Die Vorschau zeigt genau die Datei, die man herunterlädt.
+const ICON_BASE = "https://raw.githubusercontent.com/WebsiteGenerator/WebsiteGenerator/main/icons/";
 
 const availableIcons = [
-    "bitcoin", "briar", "cloud", "dev-to", "discord", "dollar", "education", 
-    "element", "euro", "facebook", "flickr", "gallery", "gaming", "github", 
-    "instagram", "internet", "key", "liberapay", "linkedin", "mail", "mastodon", 
-    "matrix", "monero", "money", "music", "note", "odysee", "onlyfans", "patreon", 
-    "paypal", "pinterest", "pixelfed", "plane", "pleroma", "polywork", "pound", 
-    "privacy", "protonmail", "reddit", "rss", "security", "server", "session", 
-    "shopping", "snapchat", "talk", "telegram", "tiktok", "tumblr", "twitch", 
+    "bitcoin", "briar", "cloud", "dev-to", "discord", "dollar", "education",
+    "element", "euro", "facebook", "flickr", "gallery", "gaming", "github",
+    "instagram", "internet", "key", "liberapay", "linkedin", "mail", "mastodon",
+    "matrix", "monero", "money", "music", "note", "odysee", "onlyfans", "patreon",
+    "paypal", "pinterest", "pixelfed", "plane", "pleroma", "polywork", "pound",
+    "privacy", "protonmail", "reddit", "rss", "security", "server", "session",
+    "shopping", "snapchat", "talk", "telegram", "tiktok", "tumblr", "twitch",
     "twitter", "user", "video", "xmpp", "youtube"
 ];
 
-function initGallery() {
-    const gallery = document.getElementById('icon-gallery');
-    if (!gallery) return;
-    
-    let html = '';
-    availableIcons.forEach(icon => {
-        const url = `https://raw.githubusercontent.com/WebsiteGenerator/WebsiteGenerator/main/icons/${icon}.png`;
-        html += `
-        <div class="icon-item" onclick="copyToClipboard('${icon}')" title="Click to copy '${icon}'">
-            <img src="${url}" alt="${icon}">
-            <span>${icon}</span>
-        </div>`;
-    });
-    gallery.innerHTML = html;
-}
-
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        alert(`Copied '${text}' to clipboard!`);
-    });
-}
-
-function addCard() {
-    cardCount++;
-    const container = document.getElementById('cards-container');
-    const cardHtml = `
-        <div class="dynamic-item" id="card-${cardCount}">
-            <button class="remove-btn" onclick="removeElement('card-${cardCount}')">×</button>
-            <div class="input-group">
-                <label>Name</label>
-                <input type="text" class="card-name" placeholder="Project Name" />
-            </div>
-            <div class="input-group">
-                <label>Description</label>
-                <input type="text" class="card-desc" placeholder="Short description" />
-            </div>
-            <div class="input-group">
-                <label>Link (URL)</label>
-                <input type="text" class="card-url" placeholder="https://..." />
-            </div>
-            <div class="input-group">
-                <label>Icon / Image URL (or Image Code)</label>
-                <input type="text" class="card-image" placeholder="Image Code (e.g. github) or full URL" />
-            </div>
-        </div>
-    `;
-    container.insertAdjacentHTML('beforeend', cardHtml);
-}
-
-function addSocial() {
-    socialCount++;
-    const container = document.getElementById('socials-container');
-    const socialHtml = `
-        <div class="dynamic-item" id="social-${socialCount}">
-            <button class="remove-btn" onclick="removeElement('social-${socialCount}')">×</button>
-            <div class="input-group">
-                <label>Name</label>
-                <input type="text" class="social-name" placeholder="e.g. GitHub" />
-            </div>
-            <div class="input-group">
-                <label>Link (URL)</label>
-                <input type="text" class="social-url" placeholder="https://..." />
-            </div>
-            <div class="input-group">
-                <label>Icon (Image Code or URL)</label>
-                <input type="text" class="social-image" placeholder="e.g. github" />
-            </div>
-        </div>
-    `;
-    container.insertAdjacentHTML('beforeend', socialHtml);
-}
-
-function removeElement(id) {
-    document.getElementById(id).remove();
-}
+const $ = (sel, root = document) => root.querySelector(sel);
+let cssContent = "";
+let lastIconField = null;
 
 function resolveImage(input) {
     if (!input) return "";
     if (!input.includes('/')) {
-        return "https://raw.githubusercontent.com/WebsiteGenerator/WebsiteGenerator/main/icons/" + input + ".png";
+        return ICON_BASE + input + ".png";
     }
     return input;
 }
 
-async function generateWebsite() {
-    const btn = document.querySelector('.btn-primary');
-    btn.textContent = "Generating...";
-    btn.disabled = true;
+function readForm() {
+    const val = id => document.getElementById(id).value;
+    return {
+        name: val('site-name') || "My Name",
+        pronouns: val('site-pronouns') || "",
+        desc: val('site-desc') || "My Description",
+        domain: val('site-domain') || "example.com",
+        image: val('site-image') || "",
+        thumb: val('site-thumb') || "",
+        cards: [...document.querySelectorAll('#cards-container .item')].map(el => ({
+            name: $('.card-name', el).value,
+            desc: $('.card-desc', el).value,
+            url: $('.card-url', el).value,
+            image: resolveImage($('.card-image', el).value)
+        })),
+        socials: [...document.querySelectorAll('#socials-container .item')].map(el => ({
+            name: $('.social-name', el).value,
+            url: $('.social-url', el).value,
+            image: resolveImage($('.social-image', el).value)
+        }))
+    };
+}
 
-    try {
-        // Load the CSS
-        let cssContent = "";
-        try {
-            const res = await fetch('template.css');
-            cssContent = await res.text();
-        } catch (e) {
-            console.error("Could not load template.css", e);
-        }
-
-        // Get form values
-        const name = document.getElementById('site-name').value || "My Name";
-        const pronouns = document.getElementById('site-pronouns').value || "";
-        const desc = document.getElementById('site-desc').value || "My Description";
-        const domain = document.getElementById('site-domain').value || "example.com";
-        const image = document.getElementById('site-image').value || "";
-        const thumb = document.getElementById('site-thumb').value || "";
-
-        // Generate Cards
-        let cardsHtml = "";
-        document.querySelectorAll('#cards-container .dynamic-item').forEach(el => {
-            const cName = el.querySelector('.card-name').value;
-            const cDesc = el.querySelector('.card-desc').value;
-            const cUrl = el.querySelector('.card-url').value;
-            const cImage = resolveImage(el.querySelector('.card-image').value);
-            const cpUrl = cUrl.replace('https://', '');
-
-            cardsHtml += `
-<div class="card bg-gray-100 rounded-lg bg-gray-800 hover:shadow-xl p-5 content-around" onclick="window.open('${cUrl}')">
+// Das erzeugte HTML ist bewusst unverändert: so sahen die Seiten schon 2021 aus.
+function buildHtml(d) {
+    let cardsHtml = "";
+    d.cards.forEach(c => {
+        const cpUrl = c.url.replace('https://', '');
+        cardsHtml += `
+<div class="card bg-gray-100 rounded-lg bg-gray-800 hover:shadow-xl p-5 content-around" onclick="window.open('${c.url}')">
     <div class="flex">
-        <img src="${cImage}" class="rounded-lg w-10 h-10">
-        <span class="font-bold ml-3 mt-2">${cName}</span>
+        <img src="${c.image}" class="rounded-lg w-10 h-10">
+        <span class="font-bold ml-3 mt-2">${c.name}</span>
     </div>
-    <p class="text-gray-400 mt-2">${cDesc}</p>
+    <p class="text-gray-400 mt-2">${c.desc}</p>
     <p class="text-blue-300 mt-2">${cpUrl}</p>
 </div>
 `;
+    });
+
+    let socialsHtml = "";
+    if (d.socials.length > 0) {
+        socialsHtml += `<div class="m-10" id="socials"><center>`;
+        d.socials.forEach(s => {
+            socialsHtml += `<img src="${s.image}" class="inline-block rounded-lg w-10 h-10 m-2 cursor-pointer hover:opacity-80 transition" id="icon_${s.name}" onclick="window.open('${s.url}')"> `;
         });
+        socialsHtml += `</center></div>`;
+    }
 
-        // Generate Socials
-        let socialsHtml = "";
-        const socialItems = document.querySelectorAll('#socials-container .dynamic-item');
-        if (socialItems.length > 0) {
-            socialsHtml += `<div class="m-10" id="socials"><center>`;
-            socialItems.forEach(el => {
-                const sName = el.querySelector('.social-name').value;
-                const sUrl = el.querySelector('.social-url').value;
-                const sImage = resolveImage(el.querySelector('.social-image').value);
-                socialsHtml += `<img src="${sImage}" class="inline-block rounded-lg w-10 h-10 m-2 cursor-pointer hover:opacity-80 transition" id="icon_${sName}" onclick="window.open('${sUrl}')"> `;
-            });
-            socialsHtml += `</center></div>`;
-        }
-
-        // Build the final HTML
-        const finalHtml = `<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html>
     <head>
-        <meta property='og:title' id="${domain}" content='${name}' />
+        <meta property='og:title' id="${d.domain}" content='${d.name}' />
         <meta property='og:type' content="website" />
-        <meta property='og:description' id="eDesc" content='${desc}' />
-        <meta property="og:image" id="eIcon" content='${thumb}' />
+        <meta property='og:description' id="eDesc" content='${d.desc}' />
+        <meta property="og:image" id="eIcon" content='${d.thumb}' />
         <meta name="theme-color" content="#c83ca0">
 
         <style>
@@ -185,17 +103,17 @@ async function generateWebsite() {
             }
         </style>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${name}</title>
-        <link rel="shortcut icon" href="${image}" type="image/x-icon">
+        <title>${d.name}</title>
+        <link rel="shortcut icon" href="${d.image}" type="image/x-icon">
     </head>
     <body class="pt-40 p-0 bg-gray-900 text-white">
         <div class="text-center md:w-1/2 w-screen select-none mx-auto">
-            <a class="text-6xl font-semibold">${name}</a> <br>
-            <a class="text-gray-500">${desc}</a> <br>
-            <a class="text-gray-700">${pronouns}</a> <br>
+            <a class="text-6xl font-semibold">${d.name}</a> <br>
+            <a class="text-gray-500">${d.desc}</a> <br>
+            <a class="text-gray-700">${d.pronouns}</a> <br>
         </div>
         <div class="w-1/2 float-right hidden md:block">
-            <img src="${image}" id="splashIcon" style="border-radius: 20px;" class="overflow-hidden w-64 mx-auto">
+            <img src="${d.image}" id="splashIcon" style="border-radius: 20px;" class="overflow-hidden w-64 mx-auto">
         </div>
         <div class="px-20 w-screen" id="list">
             ${cardsHtml}
@@ -209,25 +127,95 @@ async function generateWebsite() {
         </div>
     </footer>
 </html>`;
-
-        // Trigger download
-        const blob = new Blob([finalHtml], { type: "text/html" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = "index.html";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-    } catch (e) {
-        alert("An error occurred: " + e.message);
-    } finally {
-        btn.textContent = "Generate & Download";
-        btn.disabled = false;
-    }
 }
 
-// Initialize gallery on load
-window.onload = initGallery;
+// ---- Vorschau ----
+let previewTimer = null;
+function updatePreview() {
+    clearTimeout(previewTimer);
+    previewTimer = setTimeout(() => {
+        const d = readForm();
+        $('#preview').srcdoc = buildHtml(d);
+        $('#preview-address').textContent = d.domain;
+    }, 200);
+}
+
+function updateNameReply() {
+    const name = $('#site-name').value.trim();
+    // Die Antwort aus lol.py, 2021
+    $('#name-reply').textContent = name ? `Thanks! ${name} is a really nice name. :D` : "";
+}
+
+// ---- Karten und Icons ----
+function addItem(containerId, templateId) {
+    const node = document.getElementById(templateId).content.firstElementChild.cloneNode(true);
+    $('.remove', node).addEventListener('click', () => { node.remove(); updatePreview(); });
+    document.getElementById(containerId).appendChild(node);
+    $('input', node).focus();
+    updatePreview();
+}
+
+function initGallery() {
+    const gallery = $('#icon-gallery');
+    $('#icon-count').textContent = `· ${availableIcons.length}`;
+    gallery.innerHTML = availableIcons.map(icon => `
+        <button type="button" class="icon" role="listitem" data-icon="${icon}" title="Use '${icon}'">
+            <img src="${ICON_BASE}${icon}.png" alt="" loading="lazy" width="28" height="28"><span>${icon}</span>
+        </button>`).join('');
+    gallery.addEventListener('click', e => {
+        const btn = e.target.closest('[data-icon]');
+        if (!btn) return;
+        const code = btn.dataset.icon;
+        const status = $('#gallery-status');
+        if (lastIconField && document.body.contains(lastIconField)) {
+            lastIconField.value = code;
+            lastIconField.focus();
+            status.textContent = `Inserted '${code}'.`;
+            updatePreview();
+            return;
+        }
+        const fallback = () => { status.textContent = `Image code: ${code}. Add a card or an icon first to insert it.`; };
+        if (navigator.clipboard) navigator.clipboard.writeText(code).then(() => { status.textContent = `Copied '${code}'. Add a card or an icon to paste it.`; }, fallback);
+        else fallback();
+    });
+}
+
+// ---- Download ----
+function download(e) {
+    e.preventDefault();
+    const btn = $('.generate');
+    btn.disabled = true;
+    const blob = new Blob([buildHtml(readForm())], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = "index.html";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    btn.disabled = false;
+    $('#done').textContent = "Thanks for using my Python-Script.\nDone!";
+}
+
+async function init() {
+    try {
+        const res = await fetch('template.css');
+        if (res.ok) cssContent = await res.text();
+    } catch (err) {
+        console.error("Could not load template.css", err);
+    }
+    initGallery();
+    const form = $('#session');
+    form.addEventListener('input', e => {
+        if (e.target.id === 'site-name') updateNameReply();
+        updatePreview();
+    });
+    form.addEventListener('focusin', e => { if (e.target.classList.contains('icon-field')) lastIconField = e.target; });
+    form.addEventListener('submit', download);
+    $('#add-card').addEventListener('click', () => addItem('cards-container', 'card-template'));
+    $('#add-social').addEventListener('click', () => addItem('socials-container', 'social-template'));
+    updatePreview();
+}
+
+init();

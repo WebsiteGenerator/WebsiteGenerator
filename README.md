@@ -7,8 +7,10 @@
     <b>Generate your personal website in seconds – directly in your browser or via terminal.</b>
   </p>
 
+  <p>Part of <a href="https://bf0.by0.link"><b>Back from Zero</b></a> · old byZero projects, switched back on.</p>
+
   <p>
-    <a href="https://websitegenerator.github.io/WebsiteGenerator/"><b>🚀 Open Web Generator</b></a> •
+    <a href="https://websitegenerator.bf0.by0.link"><b>🚀 Open Web Generator</b></a> •
     <a href="https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/icons"><b>Browse Icons</b></a> •
     <a href="https://github.com/WebsiteGenerator/WebsiteGenerator/issues"><b>Report Issue</b></a>
   </p>
@@ -25,7 +27,7 @@ WebsiteGenerator lets you create a clean, beautiful personal landing page. Origi
 The easiest way to generate your website is by using the web interface. 
 It requires no installation and generates a ready-to-host `index.html` file with inline CSS for maximum performance and portability.
 
-👉 **[Try the Web Version here](https://websitegenerator.github.io/WebsiteGenerator/)**
+👉 **[Try the Web Version here](https://websitegenerator.bf0.by0.link)**
 
 ## 💻 Manual Terminal Version
 

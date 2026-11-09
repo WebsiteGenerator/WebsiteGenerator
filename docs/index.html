@@ -1,81 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebsiteGenerator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>WebsiteGenerator</title>
+  <meta name="description" content="Answer a few questions and get your personal website as a single index.html. The browser version of a Python script from 2021.">
+  <meta property="og:title" content="WebsiteGenerator">
+  <meta property="og:description" content="Answer a few questions and get your personal website as a single index.html.">
+  <meta property="og:url" content="https://websitegenerator.bf0.by0.link/">
+  <meta name="theme-color" content="#fbfaff">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="background-anim"></div>
-    
-    <div class="container">
-        <header>
-            <h1>WebsiteGenerator</h1>
-            <p>Generate your personal website in seconds.</p>
-        </header>
-
-        <main>
-            <section class="card-glass">
-                <h2>General Information</h2>
-                <div class="input-group">
-                    <label>Name</label>
-                    <input type="text" id="site-name" placeholder="Your Name or Project Name" />
-                </div>
-                <div class="input-group">
-                    <label>Pronouns (optional)</label>
-                    <input type="text" id="site-pronouns" placeholder="e.g. he/him" />
-                </div>
-                <div class="input-group">
-                    <label>Description</label>
-                    <textarea id="site-desc" rows="3" placeholder="What do you do?"></textarea>
-                </div>
-                <div class="input-group">
-                    <label>Domain</label>
-                    <input type="text" id="site-domain" placeholder="example.com" />
-                </div>
-                <div class="input-group">
-                    <label>Profile Picture (URL)</label>
-                    <input type="text" id="site-image" placeholder="https://..." />
-                </div>
-                <div class="input-group">
-                    <label>Preview Image / Thumbnail (URL)</label>
-                    <input type="text" id="site-thumb" placeholder="https://..." />
-                </div>
-            </section>
-
-            <section class="card-glass">
-                <h2>Cards</h2>
-                <p class="section-desc">Add links to your projects or portfolio.</p>
-                <div id="cards-container"></div>
-                <button class="btn btn-secondary" onclick="addCard()">+ Add Card</button>
-            </section>
-
-            <section class="card-glass">
-                <h2>Social Media</h2>
-                <p class="section-desc">Link your social networks. Use the Icon Codes from the gallery below.</p>
-                
-                <div class="gallery-container">
-                    <h3>Icon Gallery</h3>
-                    <p class="text-sm" style="color: #94a3b8; margin-bottom: 1rem;">Click any icon to copy its code, then paste it in the fields below.</p>
-                    <div id="icon-gallery"></div>
-                </div>
-
-                <div id="socials-container"></div>
-                <button class="btn btn-secondary" onclick="addSocial()">+ Add Icon</button>
-            </section>
-
-            <div class="actions">
-                <button class="btn btn-primary" onclick="generateWebsite()">Generate & Download</button>
-            </div>
-        </main>
-
-        <footer>
-            <p>Made with WebsiteGenerator</p>
-        </footer>
+  <header class="masthead">
+    <h1 class="wordmark">Website<br>Generator</h1>
+    <div class="intro">
+      <p>Answer the questions, get your personal website as one <code>index.html</code>. No account, nothing to install.</p>
+      <p class="origin">This started in June 2021 as a Python script called <code>lol.py</code> that asked you questions in the terminal. These are its questions.</p>
     </div>
+  </header>
 
-    <script src="app.js"></script>
+  <main class="layout">
+    <form class="session" id="session" autocomplete="off">
+      <fieldset>
+        <legend>About you</legend>
+        <label class="q" for="site-name"><span class="prompt">What is your name? |</span>
+          <input type="text" id="site-name" placeholder="Your name or project name"></label>
+        <p class="reply" id="name-reply" aria-live="polite"></p>
+
+        <label class="q" for="site-pronouns"><span class="prompt">What are your pronouns? (Leave empty to skip) |</span>
+          <input type="text" id="site-pronouns" placeholder="she/her, they/them, …"></label>
+
+        <label class="q" for="site-desc"><span class="prompt">What do you want to use as your description? |</span>
+          <textarea id="site-desc" rows="2" placeholder="What do you do?"></textarea></label>
+
+        <label class="q" for="site-domain"><span class="prompt">What domain do you want to use? (Without https:// or http://) |</span>
+          <input type="text" id="site-domain" placeholder="example.com"></label>
+
+        <label class="q" for="site-image"><span class="prompt">What image do you want to use? (URL) |</span>
+          <input type="url" id="site-image" placeholder="https://…/me.png"></label>
+
+        <label class="q" for="site-thumb"><span class="prompt">What image do you want to use as a thumbnail? (Only URL) |</span>
+          <input type="url" id="site-thumb" placeholder="https://…/preview.png"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Cards</legend>
+        <p class="hint">Links to your projects, shown as cards.</p>
+        <div id="cards-container" class="items"></div>
+        <button type="button" class="yn" id="add-card"><span class="prompt">Do you want to add a card? (y or n) |</span> <b>y</b></button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Social media</legend>
+        <p class="hint">Small icons under the cards. Pick an icon below, it goes into the icon field you used last.</p>
+        <div id="socials-container" class="items"></div>
+        <button type="button" class="yn" id="add-social"><span class="prompt">Do you want to add a Social Media icon? (y or n) |</span> <b>y</b></button>
+
+        <details class="gallery" open>
+          <summary>Image codes <span id="icon-count"></span></summary>
+          <div id="icon-gallery" role="list"></div>
+          <p class="hint" id="gallery-status" aria-live="polite">Click an icon to use it.</p>
+        </details>
+      </fieldset>
+
+      <div class="finish">
+        <button type="submit" class="generate">Generate index.html</button>
+        <p class="done" id="done" aria-live="polite"></p>
+      </div>
+    </form>
+
+    <aside class="preview" aria-label="Live preview">
+      <div class="window">
+        <div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="address" id="preview-address">example.com</span></div>
+        <div class="viewport"><iframe id="preview" title="Preview of your website" sandbox="allow-scripts allow-popups"></iframe></div>
+      </div>
+      <p class="hint">Live preview. This is exactly the file you download.</p>
+    </aside>
+  </main>
+
+  <footer class="foot">
+    <span>Part of <a href="https://bf0.by0.link">Back from Zero</a></span>
+    <span><a href="https://github.com/WebsiteGenerator/WebsiteGenerator">Source</a> · <a href="https://github.com/WebsiteGenerator/WebsiteGenerator/tree/main/src">Terminal version</a></span>
+  </footer>
+
+  <template id="card-template">
+    <div class="item">
+      <button type="button" class="remove" aria-label="Remove this card">remove</button>
+      <label class="q"><span class="prompt">What is the name of the card? |</span><input type="text" class="card-name" placeholder="Project name"></label>
+      <label class="q"><span class="prompt">What is the description of the card? |</span><input type="text" class="card-desc" placeholder="Short description"></label>
+      <label class="q"><span class="prompt">What is the URL of the card? |</span><input type="url" class="card-url" placeholder="https://…"></label>
+      <label class="q"><span class="prompt">What is the image of the card? (URL or image code) |</span><input type="text" class="card-image icon-field" placeholder="github"></label>
+    </div>
+  </template>
+
+  <template id="social-template">
+    <div class="item">
+      <button type="button" class="remove" aria-label="Remove this icon">remove</button>
+      <label class="q"><span class="prompt">What is the name of the network/icon? |</span><input type="text" class="social-name" placeholder="GitHub"></label>
+      <label class="q"><span class="prompt">What is the URL to your profile? |</span><input type="url" class="social-url" placeholder="https://…"></label>
+      <label class="q"><span class="prompt">Which image code? |</span><input type="text" class="social-image icon-field" placeholder="github"></label>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
 </body>
 </html>
