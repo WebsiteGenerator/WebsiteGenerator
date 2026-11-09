@@ -1,4 +1,5 @@
-// WebsiteGenerator: Formular -> eine index.html. Die Vorschau zeigt genau die Datei, die man herunterlädt.
+// WebsiteGenerator: lol.py (Juni 2021) läuft im Browser. Fragen nacheinander, wie im Terminal.
+// Jede Antwort lässt sich anklicken und ändern; das Skript spielt dann bis dorthin neu ab.
 const ICON_BASE = "https://raw.githubusercontent.com/WebsiteGenerator/WebsiteGenerator/main/icons/";
 
 const availableIcons = [
@@ -12,9 +13,10 @@ const availableIcons = [
     "twitter", "user", "video", "xmpp", "youtube"
 ];
 
-const $ = (sel, root = document) => root.querySelector(sel);
+const $ = sel => document.querySelector(sel);
+const logEl = $('#log'), screenEl = $('#screen'), lineEl = $('#line'), askEl = $('#ask'), input = $('#answer');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let cssContent = "";
-let lastIconField = null;
 
 function resolveImage(input) {
     if (!input) return "";
@@ -22,29 +24,6 @@ function resolveImage(input) {
         return ICON_BASE + input + ".png";
     }
     return input;
-}
-
-function readForm() {
-    const val = id => document.getElementById(id).value;
-    return {
-        name: val('site-name') || "My Name",
-        pronouns: val('site-pronouns') || "",
-        desc: val('site-desc') || "My Description",
-        domain: val('site-domain') || "example.com",
-        image: val('site-image') || "",
-        thumb: val('site-thumb') || "",
-        cards: [...document.querySelectorAll('#cards-container .item')].map(el => ({
-            name: $('.card-name', el).value,
-            desc: $('.card-desc', el).value,
-            url: $('.card-url', el).value,
-            image: resolveImage($('.card-image', el).value)
-        })),
-        socials: [...document.querySelectorAll('#socials-container .item')].map(el => ({
-            name: $('.social-name', el).value,
-            url: $('.social-url', el).value,
-            image: resolveImage($('.social-image', el).value)
-        }))
-    };
 }
 
 // Das erzeugte HTML ist bewusst unverändert: so sahen die Seiten schon 2021 aus.
@@ -129,63 +108,137 @@ function buildHtml(d) {
 </html>`;
 }
 
-// ---- Vorschau ----
+// ---- Daten + Vorschau ----
+let data = null;
+function withDefaults(d) {
+    return {
+        name: d.name || "My Name", pronouns: d.pronouns || "", desc: d.desc || "My Description",
+        domain: d.domain || "example.com", image: d.image || "", thumb: d.thumb || "",
+        cards: d.cards.map(c => ({ name: c.name || "", desc: c.desc || "", url: c.url || "", image: c.image || "" })),
+        socials: d.socials.map(s => ({ name: s.name || "", url: s.url || "", image: s.image || "" }))
+    };
+}
 let previewTimer = null;
 function updatePreview() {
     clearTimeout(previewTimer);
     previewTimer = setTimeout(() => {
-        const d = readForm();
+        const d = withDefaults(data);
         $('#preview').srcdoc = buildHtml(d);
-        $('#preview-address').textContent = d.domain;
-    }, 200);
+        $('#address').textContent = d.domain;
+    }, 120);
+}
+// Jede Zuweisung an die Daten aktualisiert die Vorschau
+function reactive(obj) {
+    return new Proxy(obj, { set(t, k, v) { t[k] = v; updatePreview(); return true; } });
 }
 
-function updateNameReply() {
-    const name = $('#site-name').value.trim();
-    // Die Antwort aus lol.py, 2021
-    $('#name-reply').textContent = name ? `Thanks! ${name} is a really nice name. :D` : "";
+// ---- Terminal ----
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+let answers = [], replay = [], prefill = [], askIndex = 0, runId = 0, pending = null;
+const replaying = () => askIndex < replay.length;
+
+function print(html, cls) {
+    const div = document.createElement('div');
+    if (cls) div.className = cls;
+    div.innerHTML = html;
+    logEl.appendChild(div);
+    screenEl.scrollTop = screenEl.scrollHeight;
+    return div;
+}
+async function say(text, cls) {
+    if (!replaying() && !reduce) await sleep(140);
+    print(esc(text), cls);
 }
 
-// ---- Karten und Icons ----
-function addItem(containerId, templateId) {
-    const node = document.getElementById(templateId).content.firstElementChild.cloneNode(true);
-    $('.remove', node).addEventListener('click', () => { node.remove(); updatePreview(); });
-    document.getElementById(containerId).appendChild(node);
-    $('input', node).focus();
-    updatePreview();
-}
-
-function initGallery() {
-    const gallery = $('#icon-gallery');
-    $('#icon-count').textContent = `· ${availableIcons.length}`;
-    gallery.innerHTML = availableIcons.map(icon => `
-        <button type="button" class="icon" role="listitem" data-icon="${icon}" title="Use '${icon}'">
-            <img src="${ICON_BASE}${icon}.png" alt="" loading="lazy" width="28" height="28"><span>${icon}</span>
-        </button>`).join('');
-    gallery.addEventListener('click', e => {
-        const btn = e.target.closest('[data-icon]');
-        if (!btn) return;
-        const code = btn.dataset.icon;
-        const status = $('#gallery-status');
-        if (lastIconField && document.body.contains(lastIconField)) {
-            lastIconField.value = code;
-            lastIconField.focus();
-            status.textContent = `Inserted '${code}'.`;
-            updatePreview();
-            return;
-        }
-        const fallback = () => { status.textContent = `Image code: ${code}. Add a card or an icon first to insert it.`; };
-        if (navigator.clipboard) navigator.clipboard.writeText(code).then(() => { status.textContent = `Copied '${code}'. Add a card or an icon to paste it.`; }, fallback);
-        else fallback();
+function ask(prompt, { icons = false } = {}) {
+    const idx = askIndex++;
+    const done = value => {
+        answers.push({ prompt, value });
+        print(`<span class="q">${esc(prompt)}</span><button type="button" class="ans" data-i="${idx}" title="Change this answer">${value ? esc(value) : '<span class="empty">(empty)</span>'}</button>`);
+    };
+    if (idx < replay.length) { done(replay[idx]); return Promise.resolve(replay[idx]); }
+    let iconsEl = null;
+    if (icons) {
+        iconsEl = print(availableIcons.map(i => `<button type="button" data-icon="${i}" title="${i}" aria-label="Use image code ${i}"><img src="${ICON_BASE}${i}.png" alt="" loading="lazy" width="22" height="22"></button>`).join(''), 'icons');
+    }
+    return new Promise(resolve => {
+        askEl.textContent = prompt;
+        const old = prefill[idx];
+        input.value = old && old.prompt === prompt ? old.value : "";
+        input.placeholder = idx === 0 ? "type, then press Enter" : "";
+        lineEl.hidden = false;
+        input.focus({ preventScroll: true });
+        screenEl.scrollTop = screenEl.scrollHeight;
+        pending = value => {
+            pending = null;
+            lineEl.hidden = true;
+            if (iconsEl) iconsEl.remove();
+            done(value);
+            resolve(value);
+        };
     });
 }
+const yes = v => ["y", "yes"].includes(v.trim().toLowerCase());
 
-// ---- Download ----
-function download(e) {
-    e.preventDefault();
-    const btn = $('.generate');
-    btn.disabled = true;
-    const blob = new Blob([buildHtml(readForm())], { type: "text/html" });
+async function script(id) {
+    const d = data = reactive({ name: "", pronouns: "", desc: "", domain: "", image: "", thumb: "", cards: [], socials: [] });
+    const live = () => id === runId;
+    updatePreview();
+    print(`~/WebsiteGenerator <b>$</b> python3 lol.py`, 'cmd');
+
+    d.name = await ask("What is your name? | "); if (!live()) return;
+    await say(`Thanks! ${d.name} is a really nice name. :D`, 'reply');
+    const pronouns = await ask("What are your pronouns? (Leave empty or type 'n' to skip) | "); if (!live()) return;
+    d.pronouns = pronouns.trim().toLowerCase() === "n" ? "" : pronouns;
+    d.desc = await ask("What do you want to use as your description? | "); if (!live()) return;
+    d.domain = (await ask("What domain do you want to use? (Without https:// or http://) | ")).replace(/^https?:\/\//, ""); if (!live()) return;
+    d.image = await ask("What image do you want to use? (You can enter a URL or a local path here). | "); if (!live()) return;
+    d.thumb = await ask("What image do you want to use as a thumbnail? (Only URL) | "); if (!live()) return;
+
+    while (yes(await ask("Do you want to add a card? (y or n) | "))) {
+        if (!live()) return;
+        print("-".repeat(40), 'rule');
+        const c = reactive({ name: "", desc: "", url: "", image: "" });
+        d.cards = [...d.cards, c];
+        c.name = await ask("What is the name of the card? | "); if (!live()) return;
+        c.desc = await ask("What is the description of the card? | "); if (!live()) return;
+        c.url = await ask("What is the URL of the card? | "); if (!live()) return;
+        await say("Tip: You can enter a URL, a local path, or an Image Code. Click one below.", 'dim');
+        c.image = resolveImage((await ask("What is the image of the card? | ", { icons: true })).trim()); if (!live()) return;
+        await say(`✅ Card '${c.name}' added successfully!`, 'reply');
+    }
+    if (!live()) return;
+    while (yes(await ask("Do you want to add a Social Media icon? (y or n) | "))) {
+        if (!live()) return;
+        print("-".repeat(40), 'rule');
+        const s = reactive({ name: "", url: "", image: "" });
+        d.socials = [...d.socials, s];
+        s.name = await ask("What is the name of the network/icon? | "); if (!live()) return;
+        await say("Tip: Click an Image Code below or enter a URL.", 'dim');
+        s.image = resolveImage((await ask("Which image should be used? | ", { icons: true })).trim()); if (!live()) return;
+        s.url = await ask("What is the URL to your profile? | "); if (!live()) return;
+        await say(`✅ Icon '${s.name}' added successfully!`, 'reply');
+    }
+    if (!live()) return;
+    await say("Thanks for using my Python-Script.");
+    await say("Done!");
+    const end = print(`<button type="button" class="btn" data-act="download">Download index.html</button><button type="button" class="btn ghost" data-act="again">Run it again</button>`, 'end');
+    end.querySelector('[data-act="download"]').focus({ preventScroll: true });
+}
+
+function start(fromIndex = null) {
+    runId++;
+    if (fromIndex === null) { prefill = []; replay = []; }
+    else { prefill = answers.slice(); replay = answers.slice(0, fromIndex).map(a => a.value); }
+    answers = []; askIndex = 0; pending = null;
+    logEl.innerHTML = "";
+    lineEl.hidden = true;
+    script(runId);
+}
+
+function download() {
+    const blob = new Blob([buildHtml(withDefaults(data))], { type: "text/html" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -194,28 +247,28 @@ function download(e) {
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    btn.disabled = false;
-    $('#done').textContent = "Thanks for using my Python-Script.\nDone!";
 }
 
-async function init() {
+lineEl.addEventListener('submit', e => { e.preventDefault(); if (pending) pending(input.value); });
+logEl.addEventListener('click', e => {
+    const ans = e.target.closest('.ans');
+    if (ans) { start(+ans.dataset.i); return; }
+    const icon = e.target.closest('[data-icon]');
+    if (icon) { input.value = icon.dataset.icon; input.focus(); return; }
+    const act = e.target.closest('[data-act]');
+    if (act && act.dataset.act === 'download') download();
+    if (act && act.dataset.act === 'again') start();
+});
+screenEl.addEventListener('mouseup', () => {
+    if (!lineEl.hidden && !window.getSelection().toString()) input.focus({ preventScroll: true });
+});
+
+(async () => {
     try {
         const res = await fetch('template.css');
         if (res.ok) cssContent = await res.text();
     } catch (err) {
         console.error("Could not load template.css", err);
     }
-    initGallery();
-    const form = $('#session');
-    form.addEventListener('input', e => {
-        if (e.target.id === 'site-name') updateNameReply();
-        updatePreview();
-    });
-    form.addEventListener('focusin', e => { if (e.target.classList.contains('icon-field')) lastIconField = e.target; });
-    form.addEventListener('submit', download);
-    $('#add-card').addEventListener('click', () => addItem('cards-container', 'card-template'));
-    $('#add-social').addEventListener('click', () => addItem('socials-container', 'social-template'));
-    updatePreview();
-}
-
-init();
+    start();
+})();
