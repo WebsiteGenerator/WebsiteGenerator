@@ -100,3 +100,33 @@ code { font-family: var(--f-mono); font-size: .9em; }
   .viewport { min-height: 440px; }
   .viewport iframe { width: 200%; height: 200%; transform: scale(.5); }
 }
+
+/* Datenschutz: derselbe Schreibtisch, ein einzelnes Fenster als Lesetext. */
+.top h1 a { display: inline-block; }
+.legal { width: 100%; max-width: 1280px; margin: 0 auto; flex: 1; }
+.paper { max-width: 860px; }
+.sheet { padding: clamp(20px, 4vw, 44px) clamp(18px, 4.5vw, 52px) clamp(28px, 4vw, 48px); color: var(--term-fg); font-size: 16px; line-height: 1.65; overflow-wrap: break-word; }
+.sheet .stamp { margin: 0 0 10px; font: 12.5px var(--f-mono); color: var(--term-dim); }
+.sheet .doc-title { margin: 0; font: 700 clamp(30px, 5.4vw, 48px)/1.05 var(--f-mono); letter-spacing: -.02em; color: var(--term-fg); hyphens: manual; }
+.sheet .lede { margin: 18px 0 0; max-width: 62ch; color: var(--term-fg); font-size: clamp(16px, 1.8vw, 18px); }
+.sheet section { padding-block: 26px; border-top: 1px solid #2a2638; }
+.sheet section:first-of-type { margin-top: 28px; }
+.sheet h3 { margin: 0 0 12px; display: flex; gap: 14px; align-items: baseline; font: 500 clamp(18px, 2.2vw, 21px)/1.25 var(--f-body); color: var(--term-fg); }
+.sheet h3 .no { flex: none; font: 500 13px var(--f-mono); color: var(--prompt); }
+.sheet p, .sheet ul, .sheet address { margin: 0 0 12px; max-width: 72ch; }
+.sheet p:last-child, .sheet ul:last-child { margin-bottom: 0; }
+.sheet ul { padding-left: 1.2em; }
+.sheet li { margin-bottom: 6px; }
+.sheet li::marker { color: var(--prompt); }
+.sheet address { font-style: normal; }
+.sheet strong { font-weight: 500; color: #fff; }
+.sheet a { color: var(--prompt); }
+.sheet a:hover { color: var(--term-fg); }
+.sheet code { background: #1f1b2b; color: var(--reply); padding: 1px 5px; border-radius: 4px; font-size: .84em; overflow-wrap: anywhere; }
+.sheet .callout { margin: 16px 0; padding: 16px 18px; border: 1px solid var(--prompt); border-radius: 8px; background: #17141f; max-width: 72ch; }
+.sheet .callout p { margin: 0; }
+.sheet .callout .label { margin-bottom: 8px; font: 500 12px var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--prompt); }
+.foot [aria-current] { text-decoration: none; color: var(--desk-ink); }
+@media (max-width: 560px) {
+  .sheet h3 { flex-direction: column; gap: 2px; }
+}
